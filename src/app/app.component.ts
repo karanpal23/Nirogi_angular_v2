@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Meta } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,34 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'Nirogi_Angular';
+  
+  @ViewChild('headerTemplate') headerFooterBody: ElementRef;
+  @ViewChild('footer') footer: ElementRef;
+
+  title: string = '';
+
+  
+
+  private isTabClosed: boolean = true;
+  private isPageRefreshed: boolean = false;
+
+  constructor(private router: Router,private http:HttpClient,private meta :Meta) {}
+
+  ngOnInit(): void {
+
+
+     // Set Content Security Policy header
+     const cspValue = "your-csp-directive-value";
+     this.meta.addTag({ name: 'Content-Security-Policy', content: `your-csp-directive-name ${cspValue}` });
+   
+    this.setHeader();
+
+  }
+
+ 
+  setHeader(): void {
+    let path = this.router.url.split('/')[1];
+    this.title = decodeURIComponent(path);
+  } 
+
 }
